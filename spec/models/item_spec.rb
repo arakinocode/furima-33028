@@ -12,6 +12,11 @@ RSpec.describe Item, type: :model do
       end
     end
     context '商品が出品できない場合' do
+      it '商品画像がないと出品できない' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Image can't be blank")
+      end
       it '商品名がないと出品できない' do
         @item.name = ''
         @item.valid?
@@ -66,6 +71,31 @@ RSpec.describe Item, type: :model do
         @item.price = 10_000_000
         @item.valid?
         expect(@item.errors.full_messages).to include('Price must be less than or equal to 9999999')
+      end
+      it 'categoryのidが1の場合は出品できない' do
+        @item.category_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Category must be other than 1')
+      end
+      it 'item_condition_idが1の場合は出品できない' do
+        @item.item_condition_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Item condition must be other than 1')
+      end
+      it 'postage_type_idが1の場合は出品できない' do
+        @item.postage_type_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Postage type must be other than 1')
+      end
+      it 'preparation_day_idが1の場合は出品できない' do
+        @item.preparation_day_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Preparation day must be other than 1')
+      end
+      it 'prefecture_code_idが1の場合は出品できない' do
+        @item.prefecture_code_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Prefecture code must be other than 1')
       end
     end
   end

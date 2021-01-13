@@ -16,13 +16,11 @@ class Item < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
   validates :image, presence: true
 
-  validates :category_id, numericality: { other_than: 1 }
-
-  validates :item_condition_id, numericality: { other_than: 1 }
-
-  validates :postage_type_id, numericality: { other_than: 1 }
-
-  validates :prefecture_code_id, numericality: { other_than: 0 }
-
-  validates :preparation_day_id, numericality: { other_than: 1 }
+  with_options numericality: { other_than: 1 } do
+    validates :category_id
+    validates :item_condition_id
+    validates :postage_type_id
+    validates :preparation_day_id
+    validates :prefecture_code_id
+  end
 end
