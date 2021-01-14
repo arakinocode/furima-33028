@@ -132,7 +132,7 @@
       <li class='list'>
         <%= link_to "#" do %>
         <div class='item-img-content'>
-          <%= image_tag item.image, class: "item-img" if item.image.attached? %>
+          <%= image_tag item.image, class: "item-img" %>
       <% end %>
           <%# 商品が売れていればsold outを表示しましょう %>
           <%# <% if @items_purcherse.present? %>
