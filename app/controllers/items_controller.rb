@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   def index
-    # @item = Item.order('created_at DESC')
+    @items = Item.all
+    @items = Item.includes(:user).order('created_at DESC')
   end
 
   def new
@@ -16,6 +17,11 @@ class ItemsController < ApplicationController
       render :new
     end
   end
+
+  # def purchase
+  #   @item= Item.find(params[:id])
+  #   @item.update(buyer_id: current_user.id)
+  # end
 
   # def update
   #   if Item.update(item_params)
