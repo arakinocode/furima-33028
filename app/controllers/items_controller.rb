@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_action :set_item, only: [:show, :edit, :update]
   before_action :authenticate_user!, except: [:index, :show]
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -18,7 +19,18 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
+  end
+
+  def edit
+    redirect_to root_path unless @item.user_id == current_user.id
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to root_path
+    else
+      render :edit
+    end
   end
 
   # まだ今の段階では使わないが今後使うのでとってあります
@@ -27,18 +39,14 @@ class ItemsController < ApplicationController
   #   @item.update(buyer_id: current_user.id)
   # end
 
-  # def update
-  #   if Item.update(item_params)
-  #     redirect_to root_path
-  #   else
-  #     render :edit
-  #   end
-  # end
-
   private
 
   def item_params
     params.require(:item).permit(:name, :introduction, :category_id, :item_condition_id, :postage_type_id, :prefecture_code_id,
                                  :preparation_day_id, :image, :price).merge(user_id: current_user.id)
+  end
+
+  def set_item
+    @item = Item.find(params[:id])
   end
 end
