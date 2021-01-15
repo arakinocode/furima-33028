@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
+  before_action :authenticate_user!, except: [:index, :show]
   def index
     @items = Item.includes(:user).order('created_at DESC')
   end
@@ -16,7 +16,11 @@ class ItemsController < ApplicationController
       render :new
     end
   end
-  
+
+  def show
+    @item = Item.find(params[:id])
+  end
+
   # まだ今の段階では使わないが今後使うのでとってあります
   # def purchase
   #   @item= Item.find(params[:id])
