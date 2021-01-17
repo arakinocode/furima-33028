@@ -1,6 +1,8 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
+  
+
   def index
     @items = Item.includes(:user).order('created_at DESC')
   end
@@ -34,9 +36,10 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    item = Item.find(params[:id])
-    item.destroy
-    redirect_to root_path
+    if current_user.id == @item.user.id
+      @item.destroy
+      redirect_to root_path
+    end
   end
 
   # まだ今の段階では使わないが今後使うのでとってあります
