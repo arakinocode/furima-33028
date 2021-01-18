@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
         render :show
       end
     else
-      render :show
+      redirect_to root_path
     end
   end
 
