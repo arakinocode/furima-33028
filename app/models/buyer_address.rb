@@ -7,9 +7,6 @@ class BuyerAddress
     validates :user_id
     validates :item_id
     validates :token
-  end
-
-  with_options presence: true do
     validates :post_code, format: { with: /\A\d{3}-\d{4}\z/ }
     validates :prefecture_code_id, numericality: { other_than: 1 }
     validates :city, format: { with: /\A[ぁ-んァ-ン一-龥々]/ }

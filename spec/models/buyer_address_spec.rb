@@ -14,8 +14,8 @@ RSpec.describe BuyerAddress, type: :model do
       it '郵便番号・都道府県・市区町村・番地・電話番号・tokenがあれば購入できる' do
         expect(@address).to be_valid
       end
-      it '郵便番号・都道府県・市区町村・番地・電話番号・建物名があれば購入できる' do
-        @address.building_name = '建物名'
+      it '建物名が空でも購入できる' do
+        @address.building_name = ''
         expect(@address).to be_valid
       end
     end
@@ -29,6 +29,11 @@ RSpec.describe BuyerAddress, type: :model do
         @address.prefecture_code_id = 1
         @address.valid?
         expect(@address.errors.full_messages).to include('Prefecture code must be other than 1')
+      end
+      it 'prefecture_code_idが空の時は購入できない' do
+        @address.prefecture_code_id = ''
+        @address.valid?
+        expect(@address.errors.full_messages).to include("Prefecture code can't be blank")
       end
       it '市町村がないと購入できない' do
         @address.city = ''
@@ -57,6 +62,11 @@ RSpec.describe BuyerAddress, type: :model do
       end
       it '電話番号に全角数字があると購入できない' do
         @address.phone_number = '０９０１２３４５６７８'
+        @address.valid?
+        expect(@address.errors.full_messages).to include('Phone number is invalid')
+      end
+      it '電話番号が英数字混合では購入できない' do
+        @address.phone_number = '090-AbCd-5678'
         @address.valid?
         expect(@address.errors.full_messages).to include('Phone number is invalid')
       end
