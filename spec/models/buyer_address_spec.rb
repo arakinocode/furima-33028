@@ -23,7 +23,7 @@ RSpec.describe BuyerAddress, type: :model do
       it '郵便番号がないと購入できない' do
         @address.post_code = ''
         @address.valid?
-        expect(@address.errors.full_messages).to include("Post code can't be blank", 'Post code is invalid')
+        expect(@address.errors.full_messages).to include("Post code can't be blank")
       end
       it 'prefecture_code_idが1の時は購入できない' do
         @address.prefecture_code_id = 1
