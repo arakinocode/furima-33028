@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
-  
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -24,7 +23,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    redirect_to root_path unless @item.user_id == current_user.id
+    redirect_to root_path if current_user.id != @item.user_id || !@item.buyer.nil?
   end
 
   def update
@@ -38,7 +37,7 @@ class ItemsController < ApplicationController
   def destroy
     if user_signed_in? && current_user.id == @item.user.id
       if @item.destroy
-         redirect_to root_path
+        redirect_to root_path
       else
         render :show
       end
@@ -46,12 +45,6 @@ class ItemsController < ApplicationController
       redirect_to root_path
     end
   end
-
-  # まだ今の段階では使わないが今後使うのでとってあります
-  # def purchase
-  #   @item= Item.find(params[:id])
-  #   @item.update(buyer_id: current_user.id)
-  # end
 
   private
 
